@@ -126,8 +126,35 @@ SELECT tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
        GROUP BY tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,o.ma_don,nhacc.ma_nhacc ,s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
 ##số phiếu nhập hàng, mã vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập có số lượng nhập > 5.
+SELECT tblphieunhap.ma_PN,
+                                s.ma_vat_tu,
+								ed.soluong,
+								ed.don_gia,
+								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+       INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       where ed.soluong > 5
+       GROUP BY tblphieunhap.ma_PN,s.ma_vat_tu,ed.soluong,ed.don_gia;
 #số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập vật tư có đơn vị tính là Bộ.
+SELECT tblphieunhap.ma_PN,
+                                s.ma_vat_tu,
+                                s.ten_vat_tu,
+								ed.soluong,
+								ed.don_gia,
+								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+       INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       where s.don_vi_tinh ='Bo'
+       GROUP BY tblphieunhap.ma_PN,s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
 #số phiếu xuất hàng, mã vật tư, số lượng xuất, đơn giá xuất, thành tiền xuất.
+SELECT tbldondathang.ma_don,
+                                s.ma_vat_tu,
+								ed.soluong,
+								ed.don_gia,
+								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tbldondathang
+       INNER JOIN tbldetailpx as ed on tbldondathang.ma_don = ed.id)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       GROUP BY tbldondathang.ma_don,s.ma_vat_tu,ed.soluong,ed.don_gia;
 #số phiếu xuất hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất.
  #số phiếu xuất hàng, tên khách hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất.
 
