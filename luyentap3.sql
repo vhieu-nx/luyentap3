@@ -92,6 +92,13 @@ s.ma_vat_tu,ed.soluong,
        GROUP BY tblphieunhap.ma_pn, s.ma_vat_tu,soluong,don_gia;
 
 ##số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
+SELECT tblphieunhap.ma_PN,
+s.ma_vat_tu,s.ten_vat_tu,ed.soluong,
+								ed.don_gia,
+                                  sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+       INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       GROUP BY tblphieunhap.ma_pn, s.ma_vat_tu,s.ten_vat_tu,soluong,don_gia;
 #số phiếu nhập hàng, ngày nhập hàng, số đơn đặt hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
 #số phiếu nhập hàng, ngày nhập hàng, số đơn đặt hàng, mã nhà cung cấp, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
 ##số phiếu nhập hàng, mã vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập có số lượng nhập > 5.
