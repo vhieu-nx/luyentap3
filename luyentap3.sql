@@ -147,14 +147,32 @@ SELECT tblphieunhap.ma_PN,
        where s.don_vi_tinh ='Bo'
        GROUP BY tblphieunhap.ma_PN,s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
 #số phiếu xuất hàng, mã vật tư, số lượng xuất, đơn giá xuất, thành tiền xuất.
-SELECT tbldondathang.ma_don,
+SELECT tblphieuxuat.ma_px,
                                 s.ma_vat_tu,
 								ed.soluong,
 								ed.don_gia,
-								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tbldondathang
-       INNER JOIN tbldetailpx as ed on tbldondathang.ma_don = ed.id)
+								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieuxuat
+       INNER JOIN tbldetailpx as ed on tblphieuxuat.ma_px = ed.ma_px)
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       GROUP BY tbldondathang.ma_don,s.ma_vat_tu,ed.soluong,ed.don_gia;
+       GROUP BY tblphieuxuat.ma_px,s.ma_vat_tu,ed.soluong,ed.don_gia;
 #số phiếu xuất hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất.
+SELECT tblphieuxuat.ma_px,
+                                s.ma_vat_tu,
+                                s.ten_vat_tu,
+								ed.soluong,
+								ed.don_gia FROM ((tblphieuxuat
+       INNER JOIN tbldetailpx as ed on tblphieuxuat.ma_px = ed.ma_px)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       GROUP BY tblphieuxuat.ma_px,s.ma_vat_tu,ed.soluong,ed.don_gia;
  #số phiếu xuất hàng, tên khách hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất.
+ SELECT tblphieuxuat.ma_px,
+ tblphieuxuat.ten_cus,
+                                s.ma_vat_tu,
+                                s.ten_vat_tu,
+								ed.soluong,
+								ed.don_gia
+								 FROM ((tblphieuxuat
+       INNER JOIN tbldetailpx as ed on tblphieuxuat.ma_px = ed.ma_px)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       GROUP BY tblphieuxuat.ma_px,tblphieuxuat.ten_cus,s.ma_vat_tu,ed.soluong,ed.don_gia;
 
