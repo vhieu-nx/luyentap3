@@ -112,6 +112,19 @@ SELECT tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
        GROUP BY tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,o.ma_don, s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
 #số phiếu nhập hàng, ngày nhập hàng, số đơn đặt hàng, mã nhà cung cấp, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
+SELECT tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
+                                o.ma_don,
+                                nhacc.ma_nhacc,
+                                s.ma_vat_tu,
+                                s.ten_vat_tu,
+								ed.soluong,
+								ed.don_gia,
+								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((((tblphieunhap
+       iNNER join tbldondathang as o on tblphieunhap.donhang = o.ma_don             )  
+       inner join tblnhacc as nhacc on o.nhacc = nhacc.ma_nhacc )
+       INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
+       GROUP BY tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,o.ma_don,nhacc.ma_nhacc ,s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
 ##số phiếu nhập hàng, mã vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập có số lượng nhập > 5.
 #số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập vật tư có đơn vị tính là Bộ.
 #số phiếu xuất hàng, mã vật tư, số lượng xuất, đơn giá xuất, thành tiền xuất.
