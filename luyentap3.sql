@@ -83,80 +83,85 @@ insert into tbldetailpx value('1','px01','vt01','2','24000','giao dung ngay'),('
 
 #1.#Dữ liệu bao gồm các thông tin sau: số phiếu nhập hàng, mã vật tư, 
 #số lượng nhập, đơn giá nhập, thành tiền.
-SELECT tblphieunhap.ma_PN,
+create view chitietphieunhap as SELECT tblphieunhap.ma_PN,
 s.ma_vat_tu,ed.soluong,
 								ed.don_gia,
-                                  sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+                                  soluong * don_gia 'ThanhTienNhap' FROM ((tblphieunhap
        INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
-       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       GROUP BY tblphieunhap.ma_pn, s.ma_vat_tu,soluong,don_gia;
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu);
+      select *From chitietphieunhap;
 
 ##số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
-SELECT tblphieunhap.ma_PN,
+create view chitietphieuvattu as SELECT tblphieunhap.ma_PN,
 s.ma_vat_tu,s.ten_vat_tu,ed.soluong,
 								ed.don_gia,
-                                  sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+								soluong * don_gia 'Thanh_tien_nhap' FROM ((tblphieunhap
        INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
-       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       GROUP BY tblphieunhap.ma_pn, s.ma_vat_tu,s.ten_vat_tu,soluong,don_gia;
-#số phiếu nhập hàng, ngày nhập hàng, số đơn đặt hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập
-SELECT tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu);
+       select *From chitietphieuvattu;
+       
+
+#số phiếu nhập hàng, ngày nhập hàng, số đơn đặt hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
+create view chitietphieunhapandphieuvattu as select tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
                                 o.ma_don,
                                 s.ma_vat_tu,
                                 s.ten_vat_tu,
 								ed.soluong,
 								ed.don_gia,
-								sum(soluong * don_gia)'Thanh_tien_nhap' FROM (((tblphieunhap
+								soluong * don_gia'Thanh_tien_nhap' FROM (((tblphieunhap
        iNNER join tbldondathang o on tblphieunhap.donhang = o.ma_don             )            
        INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
-       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       GROUP BY tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,o.ma_don, s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu);
+      select *From chitietphieunhapandphieuvattu;
+
 #số phiếu nhập hàng, ngày nhập hàng, số đơn đặt hàng, mã nhà cung cấp, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập.
-SELECT tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
+create view chitietphieunhapphieuvattudonhang as SELECT tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,
                                 o.ma_don,
                                 nhacc.ma_nhacc,
                                 s.ma_vat_tu,
                                 s.ten_vat_tu,
 								ed.soluong,
 								ed.don_gia,
-								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((((tblphieunhap
+								soluong * don_gia 'Thanh_tien_nhap' FROM ((((tblphieunhap
        iNNER join tbldondathang as o on tblphieunhap.donhang = o.ma_don             )  
        inner join tblnhacc as nhacc on o.nhacc = nhacc.ma_nhacc )
        INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
-       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       GROUP BY tblphieunhap.ma_PN,tblphieunhap.ngay_nhap,o.ma_don,nhacc.ma_nhacc ,s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu);
+       select *From chitietphieunhapphieuvattudonhang;
+       
 ##số phiếu nhập hàng, mã vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập có số lượng nhập > 5.
-SELECT tblphieunhap.ma_PN,
+create view chitietphieunhapsoluonglonhon5 as SELECT tblphieunhap.ma_PN,
                                 s.ma_vat_tu,
 								ed.soluong,
 								ed.don_gia,
-								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+								soluong * don_gia 'Thanh_tien_nhap' FROM ((tblphieunhap
        INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       where ed.soluong > 5
-       GROUP BY tblphieunhap.ma_PN,s.ma_vat_tu,ed.soluong,ed.don_gia;
+       where ed.soluong > 5;
+       select *from chitietphieunhapsoluonglonhon5;
+
 #số phiếu nhập hàng, mã vật tư, tên vật tư, số lượng nhập, đơn giá nhập, thành tiền nhập. Và chỉ liệt kê các chi tiết nhập vật tư có đơn vị tính là Bộ.
-SELECT tblphieunhap.ma_PN,
+create view chitietphieunhapvattudonvitinhbo as SELECT tblphieunhap.ma_PN,
                                 s.ma_vat_tu,
                                 s.ten_vat_tu,
 								ed.soluong,
 								ed.don_gia,
-								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieunhap
+								soluong * don_gia 'Thanh_tien_nhap' FROM ((tblphieunhap
        INNER JOIN tbldetailpn as ed on tblphieunhap.ma_pn = ed.ma_pn)
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       where s.don_vi_tinh ='Bo'
-       GROUP BY tblphieunhap.ma_PN,s.ma_vat_tu,s.ten_vat_tu,ed.soluong,ed.don_gia;
+       where s.don_vi_tinh ='Bo';
+       select *from chitietphieunhapvattudonvitinhbo;
 #số phiếu xuất hàng, mã vật tư, số lượng xuất, đơn giá xuất, thành tiền xuất.
-SELECT tblphieuxuat.ma_px,
+create view chitietphieuxuat as SELECT tblphieuxuat.ma_px,
                                 s.ma_vat_tu,
 								ed.soluong,
 								ed.don_gia,
-								sum(soluong * don_gia)'Thanh_tien_nhap' FROM ((tblphieuxuat
+								soluong * don_gia 'Thanh_tien_nhap' FROM ((tblphieuxuat
        INNER JOIN tbldetailpx as ed on tblphieuxuat.ma_px = ed.ma_px)
-       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
-       GROUP BY tblphieuxuat.ma_px,s.ma_vat_tu,ed.soluong,ed.don_gia;
+       INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu);
+       select *From chitietphieuxuat;
 #số phiếu xuất hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất.
-SELECT tblphieuxuat.ma_px,
+create view chitietphieuvattu1 as SELECT tblphieuxuat.ma_px,
                                 s.ma_vat_tu,
                                 s.ten_vat_tu,
 								ed.soluong,
@@ -164,8 +169,9 @@ SELECT tblphieuxuat.ma_px,
        INNER JOIN tbldetailpx as ed on tblphieuxuat.ma_px = ed.ma_px)
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
        GROUP BY tblphieuxuat.ma_px,s.ma_vat_tu,ed.soluong,ed.don_gia;
+       select * from chitietphieuvattu;
  #số phiếu xuất hàng, tên khách hàng, mã vật tư, tên vật tư, số lượng xuất, đơn giá xuất.
- SELECT tblphieuxuat.ma_px,
+ create view chitietphieuvatuandphieuxuat as SELECT tblphieuxuat.ma_px,
  tblphieuxuat.ten_cus,
                                 s.ma_vat_tu,
                                 s.ten_vat_tu,
@@ -175,4 +181,6 @@ SELECT tblphieuxuat.ma_px,
        INNER JOIN tbldetailpx as ed on tblphieuxuat.ma_px = ed.ma_px)
        INNER JOIN tblvattu as s on ed.ma_vat_tu = s.ma_vat_tu)
        GROUP BY tblphieuxuat.ma_px,tblphieuxuat.ten_cus,s.ma_vat_tu,ed.soluong,ed.don_gia;
+select *from chitietphieuvatuandphieuxuat;
+
 
